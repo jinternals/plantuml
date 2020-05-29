@@ -1,0 +1,78 @@
+@startuml
+!define BLACK   #363D5D
+!define RED     #F6363F
+!define PINK    #F6216E
+!define MAGENTA #A54FBD
+!define GREEN   #37A77C
+!define YELLOW  #F97A00
+!define BLUE    #1E98F2
+!define CYAN    #25AFCA
+!define WHITE   #FEF2DC
+
+' Base Setting
+skinparam Shadowing false
+skinparam BackgroundColor transparent
+skinparam ComponentStyle uml2
+skinparam Default {
+  FontName  'Hiragino Sans'
+  FontColor BLACK
+  FontSize  10
+  FontStyle plain
+}
+
+skinparam Sequence {
+  ArrowThickness 1
+  ArrowColor RED
+  ActorBorderThickness 1
+  LifeLineBorderColor GREEN
+  ParticipantBorderThickness 0
+}
+skinparam Participant {
+  BackgroundColor BLACK
+  BorderColor BLACK
+  FontColor #FFFFFF
+}
+
+skinparam Actor {
+  BackgroundColor BLACK
+  BorderColor BLACK
+}
+
+title <size:20>Sample Flow</size>
+
+actor User
+participant "Domain 1" as d1
+participant "Domain 2" as d2
+participant "External Service" as service
+
+
+
+User -> d1: 1.0 POST /domain1/some/api
+activate d1
+
+alt Case 1
+
+d1 -> d2: 1.1 POST /domain2/some/api
+activate d2
+
+d2 -> d1: 1.2 response
+deactivate d2
+
+end
+
+alt  Case 2
+
+d1 -> service: 1.1 POST /domain2/some/api
+
+activate d2
+
+service -> d1: 1.2 response
+deactivate d2
+
+end
+
+
+d1 -> User: 1.4 Response
+deactivate d1
+
+@enduml
